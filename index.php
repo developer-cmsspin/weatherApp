@@ -1,6 +1,6 @@
 <?php
-include 'config/constants.php';
-include 'config/Connection.php';
+include 'Configs/constants.php';
+include 'Configs/Connection.php';
 include CONTROLLER_FOLDER.'Controller.php';
 
 $scanned_directory = array_diff(scandir(MODEL_FOLDER), array('..', '.','Model.php'));

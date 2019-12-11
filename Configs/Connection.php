@@ -21,16 +21,13 @@ class Connection {
          throw new \Exception("Error reading database configuration file");
      }
      //mysql:host=localhost;dbname=testdb
-     $conStr = sprintf("mysql:host=%s;port=%d;dbname=%s;user=%s;password=%s", 
+     
+     $conStr = sprintf("mysql:host=%s;port=%d;dbname=%s", 
              $params['host'], 
              $params['port'], 
-             $params['database'], 
-             $params['user'], 
-             $params['password']);
-
-     $pdo = new \PDO($conStr);
+             $params['database']);
+     $pdo = new \PDO($conStr,$params['user'], $params['password']);
      $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-
      return $pdo;
  }
 
