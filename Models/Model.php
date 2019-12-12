@@ -77,7 +77,6 @@ abstract class Model{
             }
             
         }
-        //echo $query;
         try{
             $stmt = $this->conexion->query($query);
             if($stmt === false){

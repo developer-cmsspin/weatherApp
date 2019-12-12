@@ -1,0 +1,33 @@
+<div class="container">
+<div class="row">
+<div class="col title">
+    <h1>Historial de Humedad</h1>
+</div>
+</div>
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Ciudad</th>
+                    <th scope="col">Humedad</th>
+                    <th scope="col">Temperatura</th>
+                    <th scope="col">Fecha Muestra</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php foreach ($historial as $h) {
+                ?>
+                <tr>
+                    <th scope="row"><?= $h['ciudad'] ?></th>
+                    <td><?= $h['humedad'] ?></td>
+                    <td><?= $h['temperatura'] ?></td>
+                    <td><?= $h['fecha_toma'] ?></td>
+                </tr>
+                <?php
+                }
+                ?>
+                
+            </tbody>
+        </table>
+    </div>
+</div>

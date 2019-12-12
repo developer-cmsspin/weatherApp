@@ -1,12 +1,72 @@
-<div id="app">
-<p>{{ message }}</p>
+<div class="container">
+<div class="row">
+<div class="col title">
+    <h1>Mapa de Humedad</h1>
 </div>
+</div>
+    <div class="row">
+        <div class="col-md-4">
+            <h3>Ciudades</h3>
+            <ul class="nav flex-column">
+                <?php 
+                $i=0;
+                foreach ($ciudades as $key => $ciudad) {
+                    ?>
+                <li v-for="item in cities" class="nav-item">
+                    <a class="nav-link" href="#" onclick="openData(<?= $i ?>)"><?= $ciudad["ciudad"] ?></a>
+                </li>
+                    <?php
+                    $i++;
+                }
+                ?>
+            </ul>
+        </div>
+        <div class="col-md-8">
+            <div id="map"></div>
+        </div>
+    </div>
+</div>
+
 <script>
- new Vue({
-     el: "#app",
-     data: {
-        message: 'Hello Vue from PHP!'
-     }
- });
+var markers = new Array();
+var map;
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 37.926868, lng: -78.024902},
+    zoom: 5
+    });
+    <?php foreach ($ciudades as $key => $ciudad){ ?>
+        let marker<?= $ciudad["id"] ?>= new google.maps.Marker({position: {lat: <?= $ciudad["latitud"] ?>, lng: <?= $ciudad["longitud"] ?>}, map: map, title: '<?= $ciudad["ciudad"] ?>', label: '<?= $ciudad["id"] ?>'});
+        marker<?= $ciudad["id"] ?>.addListener('click', function() {
+            jQuery.post("<?= BASE_URL ?>?controller=home&action=getweather",{ latitude: '<?= $ciudad["latitud"] ?>', longitude:'<?= $ciudad["longitud"] ?>',ciudad_id:'<?= $ciudad["id"] ?>'},function(data){
+                let dataJson = JSON.parse(data);
+                console.debug(dataJson.data.current_observation);
+                new google.maps.InfoWindow({
+                    content: '<div id="content"><h4><?= $ciudad["ciudad"] ?></h4><h5><?= $ciudad["alias"] ?></h5><p><strong>Humedad: '+dataJson.data.current_observation.atmosphere.humidity+'</strong> </p>'+
+                    '<p><strong>Presión: </strong>'+dataJson.data.current_observation.atmosphere.pressure+'</p>'+
+                    '<p><strong>Visibilidad: </strong>'+dataJson.data.current_observation.atmosphere.visibility+'</p>'+
+                    '<p><strong>Temperatura: </strong>'+dataJson.data.current_observation.condition.temperature+'</p>'+
+                    '<p><strong>Condición: </strong>'+dataJson.data.current_observation.condition.text+'</p>'+
+                    '</div>'
+                }).open(map, marker<?= $ciudad["id"] ?>);
+            });
+        });
+        markers.push(marker<?= $ciudad["id"] ?>);
+    <?php } ?>
+}
+function openData(index){
+    google.maps.event.trigger(markers[index], 'click');
+}
 </script>
+<style>
+ #map {
+    height: 800px;
+    width:100%;
+}
+.title{
+    text-align:center;
+}
+</style>
+<script src="<?= MAPS_API ?>?key=<?= MAPS_APIKEY ?>&callback=initMap" async defer></script>
+
     
