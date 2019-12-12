@@ -13,7 +13,7 @@
                 foreach ($ciudades as $key => $ciudad) {
                     ?>
                 <li v-for="item in cities" class="nav-item">
-                    <a class="nav-link" href="#" onclick="openData(<?= $i ?>)"><?= $ciudad["ciudad"] ?></a>
+                    <a class="nav-link" style="cursor:pointer" onclick="openData(<?= $i ?>)"><?= $ciudad["ciudad"] ?></a>
                 </li>
                     <?php
                     $i++;
@@ -38,7 +38,7 @@ function initMap() {
     <?php foreach ($ciudades as $key => $ciudad){ ?>
         let marker<?= $ciudad["id"] ?>= new google.maps.Marker({position: {lat: <?= $ciudad["latitud"] ?>, lng: <?= $ciudad["longitud"] ?>}, map: map, title: '<?= $ciudad["ciudad"] ?>', label: '<?= $ciudad["id"] ?>'});
         marker<?= $ciudad["id"] ?>.addListener('click', function() {
-            jQuery.post("<?= BASE_URL ?>?controller=home&action=getweather",{ latitude: '<?= $ciudad["latitud"] ?>', longitude:'<?= $ciudad["longitud"] ?>',ciudad_id:'<?= $ciudad["id"] ?>'},function(data){
+            jQuery.post("<?= BASE_URL ?>?controller=Home&action=getweather",{ latitude: '<?= $ciudad["latitud"] ?>', longitude:'<?= $ciudad["longitud"] ?>',ciudad_id:'<?= $ciudad["id"] ?>'},function(data){
                 let dataJson = JSON.parse(data);
                 console.debug(dataJson.data.current_observation);
                 new google.maps.InfoWindow({
